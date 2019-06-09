@@ -3,9 +3,15 @@
   <div class="row">
     <div class="col-mid-12">
       <app-recipes *ngIf="feature === 'recipe'"></app-recipes>
-      <app-shopping-list
+      <!-- <app-shopping-list
         *ngIf="feature === 'shopping-list'"
+      ></app-shopping-list> -->
+      <app-shopping-list
+        *appUnless="feature !== 'shopping-list'"
       ></app-shopping-list>
     </div>
   </div>
+  <p appBasicHighlight [defaultColor]="'yellow'" [highlightColor]="'red'">
+    Style me with basic directive!
+  </p>
 </div>
