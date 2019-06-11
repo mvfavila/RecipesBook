@@ -1,5 +1,6 @@
 import { Recipe } from "./recipe.model";
 import { EventEmitter } from "@angular/core";
+import { Ingredient } from "../shared/ingredient.model";
 
 export class RecipeService {
   recipeSelected = new EventEmitter<Recipe>();
@@ -8,12 +9,14 @@ export class RecipeService {
     new Recipe(
       "First recipe",
       "Description",
-      "https://cdn.pixabay.com/photo/2016/06/15/19/09/food-1459693_1280.jpg"
+      "https://cdn.pixabay.com/photo/2016/06/15/19/09/food-1459693_1280.jpg",
+      [new Ingredient("Meat", 1), new Ingredient("French fries", 20)]
     ),
     new Recipe(
       "Crabs",
       "Best food ever",
-      "https://upload.wikimedia.org/wikipedia/commons/1/14/Caranguejo_de_Sergipe.jpg"
+      "https://upload.wikimedia.org/wikipedia/commons/1/14/Caranguejo_de_Sergipe.jpg",
+      [new Ingredient("Crab", 6), new Ingredient("Vinagrete", 3)]
     )
   ];
 
