@@ -24,4 +24,8 @@ export class RecipeService {
     // slice so it returns by value and not by reference
     return this.recipes.slice();
   }
+
+  getRecipe(id: number) {
+    return this.recipes[id];
+  }
 }
