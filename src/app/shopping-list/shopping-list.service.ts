@@ -1,6 +1,7 @@
 import { Ingredient } from "../shared/ingredient.model";
-import { EventEmitter } from "@angular/core";
+import { EventEmitter, Injectable } from "@angular/core";
 
+@Injectable({ providedIn: "root" })
 export class ShoppingListService {
   ingredientsListChanged = new EventEmitter<Ingredient[]>();
   private ingredients: Ingredient[] = [
