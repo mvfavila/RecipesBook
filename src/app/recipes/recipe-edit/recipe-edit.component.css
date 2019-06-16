@@ -1,0 +1,12 @@
+.container {
+  margin-top: 30px;
+}
+
+input.ng-invalid.ng-touched,
+input.ng-invalid.ng-dirty {
+  border: 1px solid red;
+}
+
+input.ng-pending.ng-dirty {
+  border: 1px solid yellow;
+}
