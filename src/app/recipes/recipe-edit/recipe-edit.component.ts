@@ -44,6 +44,7 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
     } else {
       this.recipeService.addRecipe(this.recipeForm.value);
     }
+    this.router.navigate(["../"], { relativeTo: this.route });
   }
 
   getIngredients() {
@@ -60,11 +61,14 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
         ])
       })
     );
-    this.router.navigate(["../"], { relativeTo: this.route });
   }
 
   onCancel() {
     this.router.navigate(["../"], { relativeTo: this.route });
+  }
+
+  onDeleteIngredient(index: number) {
+    this.getIngredients().removeAt(index);
   }
 
   ngOnDestroy() {
