@@ -1,5 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { NgForm } from "@angular/forms";
+import { Router } from "@angular/router";
 import { Observable } from "rxjs";
 
 import { AuthService, AuthResponseData } from "./auth.service";
@@ -14,7 +15,7 @@ export class AuthComponent implements OnInit {
   isLoading = false;
   error: string = null;
 
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService, private router: Router) {}
 
   ngOnInit() {}
 
@@ -45,6 +46,7 @@ export class AuthComponent implements OnInit {
       resData => {
         this.isLoading = false;
         console.log(resData);
+        this.router.navigate(["/recipes"]);
       },
       errorMessage => {
         this.error = errorMessage;
