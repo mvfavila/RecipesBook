@@ -13,9 +13,7 @@ import { RecipesModule } from "./recipes/recipes.module";
 import { ShoppingListModule } from "./shopping-list/shopping-list.module";
 import { BasicHighlightDirective } from "./shared/basic-highlight.directive";
 import { UnlessDirective } from "./shared/unless.directive";
-import { DropdownDirective } from "./shared/dropdown.directive";
-import { LoadingSpinnerComponent } from "./shared/loading-spinner/loading-spinner.component";
-import { AlertComponent } from "./shared/alert/alert.component";
+import { SharedModule } from "./shared/shared.module";
 
 @NgModule({
   declarations: [
@@ -23,10 +21,7 @@ import { AlertComponent } from "./shared/alert/alert.component";
     HeaderComponent,
     BasicHighlightDirective,
     UnlessDirective,
-    DropdownDirective,
-    AuthComponent,
-    LoadingSpinnerComponent,
-    AlertComponent
+    AuthComponent
   ],
   imports: [
     BrowserModule,
@@ -35,7 +30,8 @@ import { AlertComponent } from "./shared/alert/alert.component";
     HttpClientModule,
     AppRoutingModule,
     RecipesModule,
-    ShoppingListModule
+    ShoppingListModule,
+    SharedModule
   ],
   providers: [
     RecipeService,
