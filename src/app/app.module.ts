@@ -10,8 +10,7 @@ import { AuthInterceptorService } from "./auth/auth-interceptor.service";
 import { HeaderComponent } from "./header/header.component";
 import { RecipeService } from "./recipes/recipe.service";
 import { RecipesModule } from "./recipes/recipes.module";
-import { ShoppingListComponent } from "./shopping-list/shopping-list.component";
-import { ShoppingEditComponent } from "./shopping-list/shopping-edit/shopping-edit.component";
+import { ShoppingListModule } from "./shopping-list/shopping-list.module";
 import { BasicHighlightDirective } from "./shared/basic-highlight.directive";
 import { UnlessDirective } from "./shared/unless.directive";
 import { DropdownDirective } from "./shared/dropdown.directive";
@@ -22,8 +21,6 @@ import { AlertComponent } from "./shared/alert/alert.component";
   declarations: [
     AppComponent,
     HeaderComponent,
-    ShoppingListComponent,
-    ShoppingEditComponent,
     BasicHighlightDirective,
     UnlessDirective,
     DropdownDirective,
@@ -37,7 +34,8 @@ import { AlertComponent } from "./shared/alert/alert.component";
     ReactiveFormsModule,
     HttpClientModule,
     AppRoutingModule,
-    RecipesModule
+    RecipesModule,
+    ShoppingListModule
   ],
   providers: [
     RecipeService,
