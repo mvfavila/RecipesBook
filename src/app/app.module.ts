@@ -6,13 +6,12 @@ import { AppComponent } from "./app.component";
 import { AppRoutingModule } from "./app-routing.module";
 import { AuthInterceptorService } from "./auth/auth-interceptor.service";
 import { HeaderComponent } from "./header/header.component";
-import { RecipeService } from "./recipes/recipe.service";
-import { RecipesModule } from "./recipes/recipes.module";
 import { ShoppingListModule } from "./shopping-list/shopping-list.module";
 import { BasicHighlightDirective } from "./shared/basic-highlight.directive";
 import { UnlessDirective } from "./shared/unless.directive";
 import { AuthModule } from "./auth/auth.module";
 import { SharedModule } from "./shared/shared.module";
+import { RecipeService } from './recipes/recipe.service';
 
 @NgModule({
   declarations: [
@@ -25,7 +24,6 @@ import { SharedModule } from "./shared/shared.module";
     BrowserModule,
     HttpClientModule,
     AppRoutingModule,
-    RecipesModule,
     ShoppingListModule,
     AuthModule,
     SharedModule
