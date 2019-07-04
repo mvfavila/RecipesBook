@@ -4,6 +4,7 @@ import { Router } from "@angular/router";
 import { catchError, tap } from "rxjs/operators";
 import { throwError, BehaviorSubject } from "rxjs";
 
+import { environment } from "src/environments/environment";
 import { User } from "./user.model";
 
 export interface AuthResponseData {
@@ -24,12 +25,11 @@ export class AuthService {
 
   private tokenExpirationTimer: any;
   private readonly returnSecureToken = true;
-  private API_KEY = "AIzaSyCY3Xn4FIlR0Pn2pufF14nktxhErT4uJdA";
   private signupBaseUrl = `https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=${
-    this.API_KEY
+    environment.firebaseApiKey
   }`;
   private loginBaseUrl = `https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=${
-    this.API_KEY
+    environment.firebaseApiKey
   }`;
 
   constructor(private http: HttpClient, private router: Router) {}
