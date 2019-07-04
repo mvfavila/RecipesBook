@@ -17,6 +17,14 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
   isEditMode = false;
   recipeForm: FormGroup;
 
+  get ingredientsControls() {
+    return this.getIngredients().controls;
+  }
+
+  getIngredients() {
+    return this.recipeForm.get("ingredients") as FormArray;
+  }
+
   constructor(
     private recipeService: RecipeService,
     private route: ActivatedRoute,
@@ -45,10 +53,6 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
       this.recipeService.addRecipe(this.recipeForm.value);
     }
     this.router.navigate(["../"], { relativeTo: this.route });
-  }
-
-  getIngredients() {
-    return this.recipeForm.get("ingredients") as FormArray;
   }
 
   onAddIngredient() {
