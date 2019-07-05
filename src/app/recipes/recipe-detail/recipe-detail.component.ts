@@ -6,7 +6,7 @@ import { Store } from "@ngrx/store";
 import { Recipe } from "../recipe.model";
 import { RecipeService } from "../recipe.service";
 import * as ShoppingListActions from "src/app/shopping-list/store/shopping-list.actions";
-import * as fromShoppingList from "src/app/shopping-list/store/shopping-list.reducer";
+import * as fromApp from "src/app/store/app.reducer";
 
 @Component({
   selector: "app-recipe-detail",
@@ -22,7 +22,7 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
     private recipeService: RecipeService,
     private router: Router,
     private route: ActivatedRoute,
-    private store: Store<fromShoppingList.AppState>
+    private store: Store<fromApp.AppState>
   ) {}
 
   ngOnInit() {
