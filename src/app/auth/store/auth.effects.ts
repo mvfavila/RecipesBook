@@ -18,12 +18,86 @@ export interface AuthResponseData {
   registered?: boolean;
 }
 
+const handleAuthentication = (
+  expiresIn: number,
+  email: string,
+  userId: string,
+  token: string
+) => {
+  const expirationDate = new Date(new Date().getTime() + expiresIn * 1000);
+  return new AuthActions.AuthenticateSuccess({
+    email,
+    userId,
+    token,
+    expirationDate
+  });
+};
+
+const handleError = errorRes => {
+  let errorMessage = "An unknown error occurred!";
+
+  if (!errorRes.error || !errorRes.error.error) {
+    return of(new AuthActions.AuthenticateFail(errorMessage));
+  }
+
+  switch (errorRes.error.error.message) {
+    case "EMAIL_NOT_FOUND":
+    case "INVALID_PASSWORD":
+      errorMessage = "Incorrect e-mail and/or password.";
+      break;
+    case "USER_DISABLED":
+      errorMessage = "The user account has been disabled by an administrator.";
+      break;
+    case "EMAIL_EXISTS":
+      errorMessage = "This e-mail is already registered.";
+      break;
+    case "OPERATION_NOT_ALLOWED":
+      errorMessage = "Password sign-in is disabled for this project.";
+      break;
+    case "TOO_MANY_ATTEMPTS_TRY_LATER":
+      errorMessage =
+        "We have blocked all requests from this device due to unusual activity. Try again later.";
+      break;
+  }
+
+  return of(new AuthActions.AuthenticateFail(errorMessage));
+};
+
 @Injectable()
 export class AuthEffects {
+  private signupBaseUrl = `https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=${
+    environment.firebaseApiKey
+  }`;
   private loginBaseUrl = `https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=${
     environment.firebaseApiKey
   }`;
   private readonly returnSecureToken = true;
+
+  @Effect()
+  authSignup = this.actions$.pipe(
+    ofType(AuthActions.SIGNUP_START),
+    switchMap((signupAction: AuthActions.SignupStart) => {
+      return this.http
+        .post<AuthResponseData>(this.signupBaseUrl, {
+          email: signupAction.payload.email,
+          password: signupAction.payload.password,
+          returnSecureToken: this.returnSecureToken
+        })
+        .pipe(
+          map(resData => {
+            return handleAuthentication(
+              +resData.expiresIn,
+              resData.email,
+              resData.localId,
+              resData.idToken
+            );
+          }),
+          catchError(errorRes => {
+            return handleError(errorRes);
+          })
+        );
+    })
+  );
 
   @Effect()
   authLogin = this.actions$.pipe(
@@ -37,53 +111,23 @@ export class AuthEffects {
         })
         .pipe(
           map(resData => {
-            const expirationDate = new Date(
-              new Date().getTime() + +resData.expiresIn * 1000
+            return handleAuthentication(
+              +resData.expiresIn,
+              resData.email,
+              resData.localId,
+              resData.idToken
             );
-            return new AuthActions.LoginSuccess({
-              email: resData.email,
-              userId: resData.localId,
-              token: resData.idToken,
-              expirationDate
-            });
           }),
           catchError(errorRes => {
-            let errorMessage = "An unknown error occurred!";
-
-            if (!errorRes.error || !errorRes.error.error) {
-              return of(new AuthActions.LoginFail(errorMessage));
-            }
-
-            switch (errorRes.error.error.message) {
-              case "EMAIL_NOT_FOUND":
-              case "INVALID_PASSWORD":
-                errorMessage = "Incorrect e-mail and/or password.";
-                break;
-              case "USER_DISABLED":
-                errorMessage =
-                  "The user account has been disabled by an administrator.";
-                break;
-              case "EMAIL_EXISTS":
-                errorMessage = "This e-mail is already registered.";
-                break;
-              case "OPERATION_NOT_ALLOWED":
-                errorMessage = "Password sign-in is disabled for this project.";
-                break;
-              case "TOO_MANY_ATTEMPTS_TRY_LATER":
-                errorMessage =
-                  "We have blocked all requests from this device due to unusual activity. Try again later.";
-                break;
-            }
-
-            return of(new AuthActions.LoginFail(errorMessage));
+            return handleError(errorRes);
           })
         );
     })
   );
 
   @Effect({ dispatch: false })
-  authSuccess = this.actions$.pipe(
-    ofType(AuthActions.LOGIN_SUCCESS),
+  authRedirect = this.actions$.pipe(
+    ofType(AuthActions.AUTHENTICATE_SUCCESS, AuthActions.LOGOUT),
     tap(() => {
       this.router.navigate(["/"]);
     })
