@@ -48,12 +48,14 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
 
   onSendToShoppingList() {
     this.store.dispatch(
-      new ShoppingListActions.AddIngredients(this.recipe.ingredients)
+      ShoppingListActions.addIngredients({
+        ingredients: this.recipe.ingredients
+      })
     );
   }
 
   onDelete() {
-    this.store.dispatch(new RecipeActions.DeleteRecipe(this.selectedId));
+    this.store.dispatch(RecipeActions.deleteRecipe({ index: this.selectedId }));
     this.router.navigate(["/recipes"]);
   }
 

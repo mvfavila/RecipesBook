@@ -42,16 +42,16 @@ export class AuthComponent implements OnInit, OnDestroy {
     const password = form.value.password;
 
     if (this.isLoginMode) {
-      this.store.dispatch(new AuthActions.LoginStart({ email, password }));
+      this.store.dispatch(AuthActions.loginStart({ email, password }));
     } else {
-      this.store.dispatch(new AuthActions.SignupStart({ email, password }));
+      this.store.dispatch(AuthActions.signupStart({ email, password }));
     }
 
     form.reset();
   }
 
   onHandleError() {
-    this.store.dispatch(new AuthActions.ClearError());
+    this.store.dispatch(AuthActions.clearError());
   }
 
   ngOnDestroy() {
