@@ -14,7 +14,6 @@ import { HeaderComponent } from "./header/header.component";
 import { BasicHighlightDirective } from "./shared/basic-highlight.directive";
 import { UnlessDirective } from "./shared/unless.directive";
 import { SharedModule } from "./shared/shared.module";
-import { RecipeService } from "./recipes/recipe.service";
 import { RecipeEffects } from "./recipes/store/recipe.effects";
 import * as fromApp from "./store/app.reducer";
 import { environment } from "src/environments/environment";
@@ -37,7 +36,6 @@ import { environment } from "src/environments/environment";
     SharedModule
   ],
   providers: [
-    RecipeService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptorService,

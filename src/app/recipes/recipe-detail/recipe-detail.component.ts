@@ -5,7 +5,6 @@ import { Store } from "@ngrx/store";
 import { map, switchMap } from "rxjs/operators";
 
 import { Recipe } from "../recipe.model";
-import { RecipeService } from "../recipe.service";
 import * as ShoppingListActions from "src/app/shopping-list/store/shopping-list.actions";
 import * as fromApp from "src/app/store/app.reducer";
 import * as RecipeActions from "../store/recipe.actions";
@@ -21,7 +20,6 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
   recipeIdSubscription: Subscription;
 
   constructor(
-    private recipeService: RecipeService,
     private router: Router,
     private route: ActivatedRoute,
     private store: Store<fromApp.AppState>
@@ -55,7 +53,6 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
   }
 
   onDelete() {
-    // this.recipeService.deleteRecipe(this.selectedId);
     this.store.dispatch(new RecipeActions.DeleteRecipe(this.selectedId));
     this.router.navigate(["/recipes"]);
   }
