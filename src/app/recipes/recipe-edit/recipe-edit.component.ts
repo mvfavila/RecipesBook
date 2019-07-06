@@ -5,9 +5,9 @@ import { Store } from "@ngrx/store";
 import { Subscription } from "rxjs";
 import { map } from "rxjs/operators";
 
-import { RecipeService } from "../recipe.service";
 import { Ingredient } from "src/app/shared/ingredient.model";
 import * as fromApp from "src/app/store/app.reducer";
+import * as RecipeActions from "../store/recipe.actions";
 
 @Component({
   selector: "app-recipe-edit",
@@ -20,6 +20,8 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
   isEditMode = false;
   recipeForm: FormGroup;
 
+  private storeSub: Subscription;
+
   get ingredientsControls() {
     return this.getIngredients().controls;
   }
@@ -29,7 +31,6 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
   }
 
   constructor(
-    private recipeService: RecipeService,
     private route: ActivatedRoute,
     private router: Router,
     private store: Store<fromApp.AppState>
@@ -52,9 +53,16 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
     // );
 
     if (this.isEditMode) {
-      this.recipeService.updateRecipe(this.id, this.recipeForm.value);
+      // this.recipeService.updateRecipe(this.id, this.recipeForm.value);
+      this.store.dispatch(
+        new RecipeActions.UpdateRecipe({
+          index: this.id,
+          newRecipe: this.recipeForm.value
+        })
+      );
     } else {
-      this.recipeService.addRecipe(this.recipeForm.value);
+      // this.recipeService.addRecipe(this.recipeForm.value);
+      this.store.dispatch(new RecipeActions.AddRecipe(this.recipeForm.value));
     }
     this.router.navigate(["../"], { relativeTo: this.route });
   }
@@ -80,7 +88,12 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.idSubscription.unsubscribe();
+    if (this.idSubscription) {
+      this.idSubscription.unsubscribe();
+    }
+    if (this.storeSub) {
+      this.storeSub.unsubscribe();
+    }
   }
 
   private createIngredientsControls(ingredients: Ingredient[]): FormControl[] {
@@ -107,7 +120,7 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
 
     if (this.isEditMode) {
       // const editedRecipe = this.recipeService.getRecipe(this.id);
-      this.store
+      this.storeSub = this.store
         .select("recipe")
         .pipe(
           map(recipeState => {
