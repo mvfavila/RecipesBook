@@ -60,6 +60,8 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.recipeIdSubscription.unsubscribe();
+    if (this.recipeIdSubscription) {
+      this.recipeIdSubscription.unsubscribe();
+    }
   }
 }
