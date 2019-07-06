@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from "@angular/core";
 import { ActivatedRoute, Params, Router } from "@angular/router";
 import { Subscription } from "rxjs";
 import { Store } from "@ngrx/store";
+import { map, switchMap } from "rxjs/operators";
 
 import { Recipe } from "../recipe.model";
 import { RecipeService } from "../recipe.service";
@@ -26,12 +27,24 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.recipeIdSubscription = this.route.params.subscribe(
-      (params: Params) => {
-        this.selectedId = +params.id;
-        this.recipe = this.recipeService.getRecipe(this.selectedId);
-      }
-    );
+    this.recipeIdSubscription = this.route.params
+      .pipe(
+        map(params => {
+          return +params.id;
+        }),
+        switchMap(id => {
+          this.selectedId = id;
+          return this.store.select("recipe");
+        }),
+        map(recipesState => {
+          return recipesState.recipes.find((_, index) => {
+            return index === this.selectedId;
+          });
+        })
+      )
+      .subscribe(recipe => {
+        this.recipe = recipe;
+      });
   }
 
   onSendToShoppingList() {
