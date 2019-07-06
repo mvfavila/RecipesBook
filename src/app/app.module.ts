@@ -3,6 +3,7 @@ import { NgModule } from "@angular/core";
 import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
 import { StoreModule } from "@ngrx/store";
 import { EffectsModule } from "@ngrx/effects";
+import { StoreDevtoolsModule } from "@ngrx/store-devtools";
 
 import { AppComponent } from "./app.component";
 import { AppRoutingModule } from "./app-routing.module";
@@ -14,6 +15,7 @@ import { UnlessDirective } from "./shared/unless.directive";
 import { SharedModule } from "./shared/shared.module";
 import { RecipeService } from "./recipes/recipe.service";
 import * as fromApp from "./store/app.reducer";
+import { environment } from "src/environments/environment";
 
 @NgModule({
   declarations: [
@@ -28,6 +30,7 @@ import * as fromApp from "./store/app.reducer";
     AppRoutingModule,
     StoreModule.forRoot(fromApp.appReducer),
     EffectsModule.forRoot([AuthEffects]),
+    StoreDevtoolsModule.instrument({ logOnly: environment.production }),
     SharedModule
   ],
   providers: [
